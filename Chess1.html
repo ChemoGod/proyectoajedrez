@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final Interactivo: Ajedrez y Pensamiento Estratégico</title>
+    
+    <!-- Librerías de Ajedrez -->
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap');
+
+        /* Estilos Generales */
+        body { font-family: 'Noto Serif', serif; line-height: 1.8; background-color: #f8f9fa; color: #212529; margin: 0; padding-top: 60px; scroll-behavior: smooth; }
+        .container { max-width: 950px; margin: 20px auto; padding: 30px 50px; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-radius: 10px; border-top: 5px solid #005f73; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background-color: #001219; padding: 10px 0; box-shadow: 0 3px 8px rgba(0,0,0,0.25); z-index: 1000; text-align: center; }
+        nav a { color: #e9d8a6; text-decoration: none; font-family: 'Roboto', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 15px; padding: 10px 15px; border-radius: 5px; transition: background-color 0.3s, color 0.3s; }
+        nav a:hover { background-color: #94d2bd; color: #001219; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; color: #005f73; }
+        .project-subtitle { text-align: center; font-size: 1.4em; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #0a9396; margin-bottom: -10px; font-family: 'Playfair Display', serif;}
+        h1 { font-size: 3em; text-align: center; margin-bottom: 25px; font-weight: 700; }
+        h2 { font-size: 2.2em; border-bottom: 3px solid #94d2bd; padding-bottom: 15px; margin-top: 60px; }
+        h3 { font-size: 1.6em; color: #0a9396; border-left: 4px solid #ee9b00; padding-left: 10px; }
+        section { padding-top: 70px; margin-top: -60px; }
+        p, li { font-size: 1.1em; text-align: justify; }
+
+        /* Estilos Mejorados para la Sección Interactiva */
+        #game-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 25px; }
+        #myBoard { width: 100%; max-width: 450px; border: 8px solid #3A3836; box-shadow: 0 15px 25px rgba(0,0,0,0.25); }
+        #game-controls { flex-grow: 1; min-width: 300px; max-width: 400px; }
+        .controls-nav button { font-family: 'Roboto', sans-serif; font-size: 1.1em; padding: 10px 18px; margin: 5px; border: 2px solid #005f73; background-color: #fff; color: #005f73; border-radius: 5px; cursor: pointer; transition: all 0.2s; }
+        .controls-nav button:hover { background-color: #005f73; color: #fff; transform: translateY(-2px); }
+        .controls-nav button:disabled { background-color: #ccc; border-color: #ccc; color: #666; cursor: not-allowed; transform: none; }
+        #commentary { background-color: #eaf2f8; border-left: 5px solid #3498db; padding: 15px; margin-top: 20px; border-radius: 8px; min-height: 80px; font-style: italic; font-size: 1.05em; }
+        .anexo-imagen { width: 100%; max-width: 600px; display: block; margin: 20px auto; border: 3px solid #dee2e6; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    
+    <nav>
+        <a href="#presentacion">Presentación</a>
+        <a href="#desarrollo">Partida Interactiva</a>
+        <a href="#anexos">Anexos</a>
+    </nav>
+
+    <div class="container">
+        <section id="presentacion">
+            <p class="project-subtitle">Proyecto Final</p>
+            <h1>AJEDREZ Y PENSAMIENTO ESTRATÉGICO</h1>
+            <!-- Puedes añadir tu información de presentación aquí si lo deseas -->
+        </section>
+
+        <section id="desarrollo">
+            <h2>Partida Interactiva</h2>
+            <p>Utiliza los botones de navegación para reproducir la partida movimiento a movimiento. Los comentarios y reflexiones estratégicas aparecerán en la caja de comentarios para cada jugada clave.</p>
+            
+            <div id="game-container">
+                <div id="myBoard"></div>
+                
+                <div id="game-controls">
+                    <div class="controls-nav">
+                        <button id="startBtn">« Inicio</button>
+                        <button id="prevBtn">‹ Anterior</button>
+                        <button id="nextBtn">Siguiente ›</button>
+                        <button id="endBtn">Fin »</button>
+                    </div>
+                    
+                    <h4>Estado Actual:</h4>
+                    <div id="status" style="font-weight: bold; font-family: 'Roboto', sans-serif;"></div>
+                    
+                    <h4>Comentarios de la Jugada:</h4>
+                    <div id="commentary">¡Usa los botones para comenzar la partida!</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="anexos">
+            <h2>Anexos</h2>
+            <p>A continuación se presentan capturas de pantalla de los momentos clave de la partida como evidencia gráfica del análisis realizado.</p>
+
+            <h3>Anexo A: Fase de Apertura</h3>
+            <p>Posición tras <code>3... e6</code>, consolidando la estructura de la Defensa Siciliana y el plan de desarrollo de las blancas.</p>
+            <img src="Pega_aqui_el_codigo_Base64_de_la_captura_de_APERTURA" alt="Captura de la Apertura" class="anexo-imagen">
+
+            <h3>Anexo B: Momento del Enroque Corto</h3>
+            <p>Imagen de la posición en la jugada 8 (<code>O-O</code>), un momento estratégico clave para asegurar la integridad del rey.</p>
+            <img src="Pega_aqui_el_codigo_Base64_de_la_captura_del_ENROQUE" alt="Captura del Enroque" class="anexo-imagen">
+
+            <h3>Anexo C: Posición de Jaque Mate Final</h3>
+            <p>Captura del momento final de la partida, donde se puede apreciar el jaque mate.</p>
+            <img src="Pega_aqui_el_codigo_Base64_de_la_captura_del_JAQUE_MATE" alt="Captura del Jaque Mate Final" class="anexo-imagen">
+        </section>
+    </div>
+
+<script>
+$(document).ready(function() {
+    var game = new Chess();
+    var pgn = `[Event "Proyecto Final"]
+[Site "Lichess.org"]
+[Date "2024.07.15"]
+[White "Luis Anderson Novoa Ramirez"]
+[Black "Oponente"]
+[Result "1-0"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bc4 e6 4. d3 a6 5. Bg5 f6 6. Bh4 b6 7. b3 Nge7 8. O-O h6 9. Ba3 Qa5 10. Bb2 d6 11. Qd2 g5 12. Bg3 e5 13. h4 Qb4 14. c3 Qa5 15. b4 cxb4 16. cxb4 Qa4 17. Bb3 Qb5 18. a3 a5 19. Nc3 Qa6 20. b5 Qb7 21. bxc6 Qxc6 22. Ba4 b5 23. Bxb5 Qd7 24. Bxd7+ Bxd7 25. d4 exd4 26. Nxd4 gxh4 27. Bxh4 Ng6 28. Bxf6 Rg8 29. Nd5 Rc8 30. Rac1 Rxc1 31. Rxc1 Ne5 32. Bxe5 dxe5 33. Nf6+ Kf7 34. Nxd7 exd4 35. Qxd4 Bxa3 36. Rc7 Ke6 37. Nc5+ Bxc5 38. Qxc5 Rd8 39. Qe7# 1-0`;
+    
+    var comments = {
+        1: "El oponente inicia con la Defensa Siciliana (1...c5), una respuesta aguda y asimétrica contra 1.e4.",
+        8: "Enroque corto. La seguridad del rey es la prioridad principal antes de comenzar operaciones en el centro o los flancos.",
+        21: "Intercambio de peones y piezas menores, buscando abrir la posición para activar mis piezas más fuertes.",
+        33: "Este jaque con el caballo (Nf6+) marca el punto de inflexión. El rey negro pierde su última defensa y queda expuesto al ataque.",
+        37: "La jugada Nc5+ fuerza un intercambio que elimina la última pieza defensora clave del rey negro.",
+        39: "¡Jaque Mate! La Dama, sin oposición, da el golpe final. Una victoria lograda a través de la táctica y el ataque al rey."
+    };
+
+    var board = null; 
+    var history = null;
+    var currentMove = -1;
+
+    function updateGameInfo() {
+        var moveData = currentMove >= 0 ? history[currentMove] : null;
+        var moveNumber = Math.floor(currentMove / 2) + 1;
+        var turn = game.turn() === 'w' ? 'Blancas' : 'Negras';
+        var statusText = `Turno de las ${turn}`;
+        
+        if (game.in_checkmate()) { statusText = `Jaque Mate. Ganan las ${turn === 'b' ? 'Blancas' : 'Negras'}.`; } 
+        else if (game.in_draw()) { statusText = 'Partida terminada en tablas.'; }
+        
+        $('#status').html(statusText);
+        var commentText = "---";
+        if (moveData) {
+            commentText = comments[moveNumber] || `Jugada ${moveNumber}: ${moveData.san}`;
+        }
+        $('#commentary').html(commentText);
+
+        $('#prevBtn').prop('disabled', currentMove < 0);
+        $('#startBtn').prop('disabled', currentMove < 0);
+        $('#nextBtn').prop('disabled', currentMove >= history.length - 1);
+        $('#endBtn').prop('disabled', currentMove >= history.length - 1);
+    }
+
+    function initGame() {
+        game.load_pgn(pgn);
+        history = game.history({ verbose: true });
+        
+        var config = {
+            draggable: false,
+            position: 'start',
+            // === LA LÍNEA CRÍTICA Y CORREGIDA ===
+            // Este enlace usa una CDN (jsdelivr) que está optimizada para servir estos archivos y no será bloqueada.
+            pieceTheme: 'https://cdn.jsdelivr.net/gh/lichess-org/lila-asset/piece/merida/{piece}.svg'
+        };
+        
+        board = Chessboard('myBoard', config);
+        updateGameInfo();
+    }
+    
+    $('#startBtn').on('click', function() { game.reset(); currentMove = -1; board.position('start'); updateGameInfo(); });
+    $('#prevBtn').on('click', function() { if (currentMove < 0) return; game.undo(); currentMove--; board.position(game.fen()); updateGameInfo(); });
+    $('#nextBtn').on('click', function() { if (currentMove >= history.length - 1) return; currentMove++; game.move(history[currentMove]); board.position(game.fen()); updateGameInfo(); });
+    $('#endBtn').on('click', function() { game.load_pgn(pgn); board.position(game.fen()); currentMove = history.length - 1; updateGameInfo(); });
+
+    initGame();
+});
+</script>
+</body>
+</html>
